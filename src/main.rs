@@ -77,6 +77,35 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let config = Config::get().await?;
     let id = "";
     let user_data = UserData::get(&config.token, id).await?;
-    println!("{:#?}", user_data);
+    println!("id: {}", user_data.id);
+    println!("username: {}", user_data.username);
+    println!("avatar: {}", user_data.avatar.unwrap_or_else(|| "None".to_string()));
+    println!("discriminator: {}", user_data.discriminator);
+    println!("public_flags: {}", user_data.public_flags);
+    println!("flags: {}", user_data.flags);
+    println!("bot: {}", user_data.bot.unwrap_or_else(|| false));
+    println!("banner: {}", user_data.banner.unwrap_or_else(|| "None".to_string()));
+    println!("accent_color: {}", user_data.accent_color.unwrap_or_else(|| 0));
+    println!("global_name: {}", user_data.global_name.unwrap_or_else(|| "None".to_string()));
+    if !user_data.avatar_decoration_data.is_none() {
+        println!("avatar_decoration_data:");
+        println!(" - asset: {}", user_data.avatar_decoration_data?.asset);
+        println!(" - sku_id: {}", user_data.avatar_decoration_data?.sku_id);
+        println!(" - expires_at: {}", user_data.avatar_decoration_data?.expires_at.unwrap_or_else(|| "None".to_string()));
+    } else {
+        println!("avatar_decoration_data: None");
+    }
+    println!("banner_color: {}", user_data.banner_color.unwrap_or_else(|| "None".to_string()));
+    if !user_data.clan.is_none() {
+        println!("clan:");
+        println!(" - identity_guild_id: {}", user_data.clan?.identity_guild_id);
+        println!(" - identity_enabled: {}", user_data.clan?.identity_enabled);
+        println!(" - tag: {}", user_data.clan?.tag);
+        println!(" - badge: {}", user_data.clan?.badge);
+    } else {
+        println!("clan: None");
+    }
     Ok(())
 }
+
+// todo cargo runしてエラーを見ろ
