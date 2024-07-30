@@ -50,6 +50,21 @@ struct UserData {
     pub clan: Option<Clan>,
 }
 
+#[derive(Eq, PartialEq)]
+enum ImageType {
+    Avatar,
+    Banner,
+}
+
+impl std::fmt::Display for ImageType {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            ImageType::Avatar => write!(f, "avatars"),
+            ImageType::Banner => write!(f, "banners"),
+        }
+    }
+}
+
 impl UserData {
     async fn get(token: &str, user_id: &str) -> Result<UserData, Box<dyn std::error::Error>> {
         let client = Client::new();
