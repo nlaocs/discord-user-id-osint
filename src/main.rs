@@ -64,12 +64,6 @@ impl UserData {
         let user_data: UserData = serde_json::from_str(&body)?;
         Ok(user_data)
     }
-    async fn get_avatar(&self) -> String {
-        match self.id {
-            Some(id) => id,
-            None => "None".to_string(),
-        }
-    }
 }
 
 #[tokio::main]
