@@ -2,6 +2,7 @@ use reqwest::Client;
 use reqwest::header::{AUTHORIZATION, CONTENT_TYPE, HeaderMap, HeaderValue};
 use serde::{Deserialize, Serialize};
 use tokio::{fs::{File, OpenOptions}, io::{self, AsyncReadExt, AsyncWriteExt}};
+use futures::future::join_all;
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Config {
@@ -134,6 +135,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let config = Config::get().await?;
     let id = "";
     let user_data = UserData::get(&config.token, id).await?;
+
+
+    let futures = vec![
+        user_data.id_to_link(ImageType::Avatar),
+        user_data.id_to_link(ImageType::Banner),
+    ];
+    let img_link = join_all(futures).await;
+
+    let avatar = img_link[0].as_ref().clone();
+    let banner = img_link[1].as_ref().clone();
+
     println!("id: {}", user_data.id);
     println!("username: {}", user_data.username);
     println!("avatar: {}", user_data.avatar.unwrap_or_else(|| "None".to_string()));
