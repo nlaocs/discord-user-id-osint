@@ -79,6 +79,25 @@ impl UserData {
         let user_data: UserData = serde_json::from_str(&body)?;
         Ok(user_data)
     }
+    async fn id_to_link(&self, img_type: ImageType) -> Result<String, Box<dyn std::error::Error>> {
+        if img_type == ImageType::Avatar {
+            if self.avatar.is_none() {
+                return Ok("https://cdn.discordapp.com/embed/avatars/0.png".to_string());
+            }
+        } else {
+            if self.banner.is_none() {
+                return Ok("None".to_string());
+            }
+        }
+        let img = self.avatar.clone()?;
+
+        let response = reqwest::get(&format!("https://cdn.discordapp.com/{}/{}/{}.gif", &img_type, self.id, img)).await?;
+        return if response.status().is_success() {
+            Ok(format!("https://cdn.discordapp.com/{}/{}/{}.gif", &img_type, self.id, img))
+        } else {
+            Ok(format!("https://cdn.discordapp.com/{}/{}/{}.png", &img_type, self.id, img))
+        };
+    }
 }
 
 #[tokio::main]
