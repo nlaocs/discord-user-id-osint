@@ -98,6 +98,35 @@ impl UserData {
             Ok(format!("https://cdn.discordapp.com/{}/{}/{}.png", &img_type, self.id, img))
         };
     }
+    fn check_flags(&self) -> Vec<String> {
+        const FLAGS: &[(&str, u64)] = &[
+            ("Staff", 1),
+            ("Partnered_Server_Owner", 2),
+            ("HypeSquad_Events", 4),
+            ("Bug_Hunter_Level_1", 8),
+            ("HypeSquad_Bravery", 64),
+            ("HypeSquad_Brilliance", 128),
+            ("HypeSquad_Balance", 256),
+            ("Premium_Early_Supporter", 512),
+            ("Team_Pseudo_User", 1024),
+            ("Bug_Hunter_Level_2", 16384),
+            ("Verified_Bot", 65536),
+            ("Verified_Developer", 131072),
+            ("Certified_Moderator", 262144),
+            ("Bot_Http_Interactions", 524288),
+            ("Active_Developer", 4194304)
+        ];
+
+        FLAGS.iter()
+            .filter_map(|&(flag_name, flag_value)| {
+                if &self.public_flags & flag_value == flag_value {
+                    Some(flag_name.to_string())
+                } else {
+                    None
+                }
+            })
+            .collect()
+    }
 }
 
 #[tokio::main]
