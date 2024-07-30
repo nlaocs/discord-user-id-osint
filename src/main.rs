@@ -18,7 +18,7 @@ impl Config {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 struct Clan {
     pub identity_guild_id: String,
     pub identity_enabled: bool,
@@ -26,7 +26,7 @@ struct Clan {
     pub badge: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 struct AvatarDecorationData {
     pub asset: String,
     pub sku_id: String,
