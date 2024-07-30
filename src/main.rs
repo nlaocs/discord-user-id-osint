@@ -148,12 +148,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("id: {}", user_data.id);
     println!("username: {}", user_data.username);
-    println!("avatar: {}", user_data.avatar.unwrap_or_else(|| "None".to_string()));
+    println!("avatar: {}", avatar?);
     println!("discriminator: {}", user_data.discriminator);
     println!("public_flags: {}", user_data.public_flags);
     println!("flags: {}", user_data.flags);
     println!("bot: {}", user_data.bot.unwrap_or_else(|| false));
-    println!("banner: {}", user_data.banner.unwrap_or_else(|| "None".to_string()));
+    println!("banner: {}", banner?);
     if user_data.accent_color.is_some() {
         println!("accent_color: {}", format!("#{:06x}", user_data.accent_color.unwrap()));
     } else {
