@@ -85,7 +85,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("flags: {}", user_data.flags);
     println!("bot: {}", user_data.bot.unwrap_or_else(|| false));
     println!("banner: {}", user_data.banner.unwrap_or_else(|| "None".to_string()));
-    println!("accent_color: {}", user_data.accent_color.unwrap_or_else(|| 0));
     if user_data.accent_color.is_some() {
         println!("accent_color: {}", format!("#{:06x}", user_data.accent_color.unwrap()));
     } else {
