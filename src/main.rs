@@ -34,7 +34,7 @@ struct AvatarDecorationData {
     pub expires_at: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 struct UserData {
     pub id: String,
     pub username: String,
