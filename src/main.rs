@@ -86,20 +86,26 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
     println!("global_name: {}", user_data.global_name.unwrap_or_else(|| "None".to_string()));
     if user_data.avatar_decoration_data.is_some() {
+        let avatar_decoration_data = user_data.avatar_decoration_data.clone().unwrap();
         println!("avatar_decoration_data:");
-        println!(" - asset: {}", user_data.avatar_decoration_data.clone().unwrap().asset);
-        println!(" - sku_id: {}", user_data.avatar_decoration_data.clone().unwrap().sku_id);
-        println!(" - expires_at: {}", user_data.avatar_decoration_data.clone().unwrap().expires_at.unwrap_or_else(|| "None".to_string()));
+        println!(" - asset: {}", avatar_decoration_data.asset);
+        println!(" - sku_id: {}", avatar_decoration_data.sku_id);
+        if avatar_decoration_data.expires_at.is_some() {
+            println!(" - expires_at: {}", avatar_decoration_data.expires_at.unwrap());
+        } else {
+            println!(" - expires_at: None");
+        }
     } else {
         println!("avatar_decoration_data: None");
     }
     println!("banner_color: {}", user_data.banner_color.unwrap_or_else(|| "None".to_string()));
     if user_data.clan.is_some() {
+        let clan = user_data.clan.clone().unwrap();
         println!("clan:");
-        println!(" - identity_guild_id: {}", user_data.clan.clone().unwrap().identity_guild_id);
-        println!(" - identity_enabled: {}", user_data.clan.clone().unwrap().identity_enabled);
-        println!(" - tag: {}", user_data.clan.clone().unwrap().tag);
-        println!(" - badge: {}", user_data.clan.clone().unwrap().badge);
+        println!(" - identity_guild_id: {}", clan.identity_guild_id);
+        println!(" - identity_enabled: {}", clan.identity_enabled);
+        println!(" - tag: {}", clan.tag);
+        println!(" - badge: {}", clan.badge);
     } else {
         println!("clan: None");
     }
