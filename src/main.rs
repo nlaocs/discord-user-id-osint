@@ -151,6 +151,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("avatar: {}", avatar?);
     println!("discriminator: {}", user_data.discriminator);
     println!("public_flags: {}", user_data.public_flags);
+    if user_data.public_flags != 0 {
+        println!("Badge:");
+        for flag in user_data.check_flags() {
+            println!(" - {}", flag);
+        }
+    } else {
+        println!("Badge: None");
+    }
     println!("flags: {}", user_data.flags);
     println!("bot: {}", user_data.bot.unwrap_or_else(|| false));
     println!("banner: {}", banner?);
