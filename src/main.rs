@@ -90,7 +90,7 @@ impl UserData {
                 return Ok("None".to_string());
             }
         }
-        let img = self.avatar.clone()?;
+        let img = self.avatar.clone().unwrap();
 
         let response = reqwest::get(&format!("https://cdn.discordapp.com/{}/{}/{}.gif", &img_type, self.id, img)).await?;
         return if response.status().is_success() {
@@ -183,7 +183,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
     println!("banner_color: {}", user_data.banner_color.unwrap_or_else(|| "None".to_string()));
     if user_data.clan.is_some() {
-        let clan = user_data.clan.clone()?;
+        let clan = user_data.clan.clone().unwrap();
         println!("clan:");
         println!(" - identity_guild_id: {}", clan.identity_guild_id);
         println!(" - identity_enabled: {}", clan.identity_enabled);
