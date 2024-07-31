@@ -1,8 +1,8 @@
 use reqwest::Client;
 use reqwest::header::{AUTHORIZATION, CONTENT_TYPE, HeaderMap, HeaderValue};
-use serde::{Deserialize, Serialize};
-use tokio::{fs::{File, OpenOptions}, io::{self, AsyncReadExt, AsyncWriteExt}, join};
 use rustyline::DefaultEditor;
+use serde::{Deserialize, Serialize};
+use tokio::{fs::File, io::AsyncReadExt, join};
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Config {
