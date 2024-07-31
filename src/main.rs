@@ -54,6 +54,7 @@ struct UserData {
 enum ImageType {
     Avatar,
     Banner,
+    AvatarDecoration,
 }
 
 impl std::fmt::Display for ImageType {
@@ -61,6 +62,7 @@ impl std::fmt::Display for ImageType {
         match self {
             ImageType::Avatar => write!(f, "avatars"),
             ImageType::Banner => write!(f, "banners"),
+            ImageType::AvatarDecoration => write!(f, "avatar-decoration-presets"),
         }
     }
 }
