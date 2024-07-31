@@ -146,15 +146,19 @@ impl UserData {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let mut rl = DefaultEditor::new()?;
     let config = Config::get().await?;
     let id = "";
     let user_data = UserData::get(&config.token, id).await?;
+        let id = rl.readline("ID: ")?;
 
 
-    let (avatar, banner) = join!(
-        user_data.id_to_link(ImageType::Avatar),
-        user_data.id_to_link(ImageType::Banner)
-    );
+
+        let (avatar, banner, asset) = join!(
+            user_data.id_to_link(ImageType::Avatar),
+            user_data.id_to_link(ImageType::Banner),
+            user_data.id_to_link(ImageType::AvatarDecoration)
+        );
 
     println!("id: {}", user_data.id);
     println!("username: {}", user_data.username);
