@@ -82,22 +82,34 @@ impl UserData {
         Ok(user_data)
     }
     async fn id_to_link(&self, img_type: ImageType) -> Result<String, Box<dyn std::error::Error>> {
-        if img_type == ImageType::Avatar {
-            if self.avatar.is_none() {
-                return Ok("https://cdn.discordapp.com/embed/avatars/0.png".to_string());
-            }
+        let img_id;
+        if img_type == ImageType::Avatar && self.avatar.is_none() {
+            return Ok("https://cdn.discordapp.com/embed/avatars/0.png".to_string());
+        } else if img_type == ImageType::Banner && self.banner.is_none() {
+            return Ok("None".to_string());
         } else {
-            if self.banner.is_none() {
-                return Ok("None".to_string());
-            }
+            img_id = match img_type {
+                ImageType::Avatar => self.avatar.clone().unwrap(),
+                ImageType::Banner => self.banner.clone().unwrap(),
+                ImageType::AvatarDecoration => self.avatar_decoration_data.clone().unwrap().asset,
+            };
         }
-        let img = self.avatar.clone().unwrap();
+        let mut url = String::new();
+        if img_type == ImageType::Avatar || img_type == ImageType::Banner {
+            url = format!("https://cdn.discordapp.com/{}/{}/{}", &img_type, self.id, img_id)
+        } else if img_type == ImageType::AvatarDecoration {
+            return Ok(format!("https://cdn.discordapp.com/{}/{}.png?size=4096", &img_type, img_id));
+        }
 
-        let response = reqwest::get(&format!("https://cdn.discordapp.com/{}/{}/{}.gif", &img_type, self.id, img)).await?;
+        url.push_str(".gif");
+        let response = reqwest::get(&url).await?;
         return if response.status().is_success() {
-            Ok(format!("https://cdn.discordapp.com/{}/{}/{}.gif", &img_type, self.id, img))
+            url.push_str("?size=4096");
+            Ok(url)
         } else {
-            Ok(format!("https://cdn.discordapp.com/{}/{}/{}.png", &img_type, self.id, img))
+            url.truncate(url.len() - 4);
+            url.push_str(".png?size=4096");
+            Ok(url)
         };
     }
     fn check_flags(&self) -> Vec<String> {
