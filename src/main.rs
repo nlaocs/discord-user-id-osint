@@ -148,10 +148,11 @@ impl UserData {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut rl = DefaultEditor::new()?;
     let config = Config::get().await?;
-    let id = "";
-    let user_data = UserData::get(&config.token, id).await?;
+    loop {
         let id = rl.readline("ID: ")?;
+        println!();
 
+        let user_data = UserData::get(&config.token, &id).await?;
 
 
         let (avatar, banner, asset) = join!(
@@ -160,53 +161,54 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             user_data.id_to_link(ImageType::AvatarDecoration)
         );
 
-    println!("id: {}", user_data.id);
-    println!("username: {}", user_data.username);
-    println!("avatar: {}", avatar?);
-    println!("discriminator: {}", user_data.discriminator);
-    println!("public_flags: {}", user_data.public_flags);
-    if user_data.public_flags != 0 {
-        println!("Badge:");
-        for flag in user_data.check_flags() {
-            println!(" - {}", flag);
-        }
-    } else {
-        println!("Badge: None");
-    }
-    println!("flags: {}", user_data.flags);
-    println!("bot: {}", user_data.bot.unwrap_or_else(|| false));
-    println!("banner: {}", banner?);
-    if user_data.accent_color.is_some() {
-        println!("accent_color: {}", format!("#{:06x}", user_data.accent_color.unwrap()));
-    } else {
-        println!("accent_color: None");
-    }
-    println!("global_name: {}", user_data.global_name.unwrap_or_else(|| "None".to_string()));
-    if user_data.avatar_decoration_data.is_some() {
-        let avatar_decoration_data = user_data.avatar_decoration_data.clone().unwrap();
-        println!("avatar_decoration_data:");
-        println!(" - asset: {}", avatar_decoration_data.asset);
-        println!(" - sku_id: {}", avatar_decoration_data.sku_id);
-        if avatar_decoration_data.expires_at.is_some() {
-            println!(" - expires_at: {}", avatar_decoration_data.expires_at.unwrap());
+        println!("id: {}", user_data.id);
+        println!("username: {}", user_data.username);
+        println!("avatar: {}", avatar?);
+        println!("discriminator: {}", user_data.discriminator);
+        println!("public_flags: {}", user_data.public_flags);
+        if user_data.public_flags != 0 {
+            println!("Badge:");
+            for flag in user_data.check_flags() {
+                println!(" - {}", flag);
+            }
         } else {
-            println!(" - expires_at: None");
+            println!("Badge: None");
         }
-    } else {
-        println!("avatar_decoration_data: None");
+        println!("flags: {}", user_data.flags);
+        println!("bot: {}", user_data.bot.unwrap_or_else(|| false));
+        println!("banner: {}", banner?);
+        if user_data.accent_color.is_some() {
+            println!("accent_color: {}", format!("#{:06x}", user_data.accent_color.unwrap()));
+        } else {
+            println!("accent_color: None");
+        }
+        println!("global_name: {}", user_data.global_name.unwrap_or_else(|| "None".to_string()));
+        if user_data.avatar_decoration_data.is_some() {
+            let avatar_decoration_data = user_data.avatar_decoration_data.clone().unwrap();
+            println!("avatar_decoration_data:");
+            println!(" - asset: {}", asset?);
+            println!(" - sku_id: {}", avatar_decoration_data.sku_id);
+            if avatar_decoration_data.expires_at.is_some() {
+                println!(" - expires_at: {}", avatar_decoration_data.expires_at.unwrap());
+            } else {
+                println!(" - expires_at: None");
+            }
+        } else {
+            println!("avatar_decoration_data: None");
+        }
+        println!("banner_color: {}", user_data.banner_color.unwrap_or_else(|| "None".to_string()));
+        if user_data.clan.is_some() {
+            let clan = user_data.clan.clone().unwrap();
+            println!("clan:");
+            println!(" - identity_guild_id: {}", clan.identity_guild_id);
+            println!(" - identity_enabled: {}", clan.identity_enabled);
+            println!(" - tag: {}", clan.tag);
+            println!(" - badge: {}", clan.badge);
+        } else {
+            println!("clan: None");
+        }
+        println!();
     }
-    println!("banner_color: {}", user_data.banner_color.unwrap_or_else(|| "None".to_string()));
-    if user_data.clan.is_some() {
-        let clan = user_data.clan.clone().unwrap();
-        println!("clan:");
-        println!(" - identity_guild_id: {}", clan.identity_guild_id);
-        println!(" - identity_enabled: {}", clan.identity_enabled);
-        println!(" - tag: {}", clan.tag);
-        println!(" - badge: {}", clan.badge);
-    } else {
-        println!("clan: None");
-    }
-    Ok(())
 }
 
 // todo cargo runしてエラーを見ろ
