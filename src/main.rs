@@ -10,11 +10,11 @@ struct Config {
 }
 
 impl Config {
-    async fn get() -> Result<Config, Box<dyn std::error::Error>> {
+    async fn get() -> Result<Self, Box<dyn std::error::Error>> {
         let mut file = File::open("config.json").await?;
         let mut contents = String::new();
         file.read_to_string(&mut contents).await?;
-        let config: Config = serde_json::from_str(&contents)?;
+        let config: Self = serde_json::from_str(&contents)?;
         Ok(config)
     }
 }
@@ -69,7 +69,7 @@ impl std::fmt::Display for ImageType {
 }
 
 impl UserData {
-    async fn get(token: &str, user_id: &str) -> Result<UserData, Box<dyn std::error::Error>> {
+    async fn get(token: &str, user_id: &str) -> Result<Self, Box<dyn std::error::Error>> {
         let client = Client::new();
         let mut header = HeaderMap::new();
         header.insert(CONTENT_TYPE, HeaderValue::from_static("application/json"));
@@ -79,7 +79,7 @@ impl UserData {
             .headers(header)
             .send().await?;
         let body = res.text().await?;
-        let user_data: UserData = serde_json::from_str(&body)?;
+        let user_data: Self = serde_json::from_str(&body)?;
         Ok(user_data)
     }
     async fn id_to_link(&self, img_type: ImageType) -> Result<String, Box<dyn std::error::Error>> {
