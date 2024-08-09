@@ -88,6 +88,8 @@ impl UserData {
             return Ok("https://cdn.discordapp.com/embed/avatars/0.png".to_string());
         } else if img_type == ImageType::Banner && self.banner.is_none() {
             return Ok("None".to_string());
+        } else if img_type == ImageType::AvatarDecoration && self.avatar_decoration_data.is_none() {
+            return Ok("None".to_string());
         } else {
             img_id = match img_type {
                 ImageType::Avatar => self.avatar.clone().unwrap(),
